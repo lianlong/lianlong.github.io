@@ -38,6 +38,6 @@ type: page
 
 [HyG](https://gaohaoyang.github.io/) \| [Anotherhome](https://www.anotherhome.net)
 
-## Comments
+## 评论
 
 {% include comments.html %}
