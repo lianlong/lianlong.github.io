@@ -36,7 +36,7 @@ github搭建过程中问题比较少，网上资料比较多，主要是对于�
 
 同时注册了百度站长工具和google站长工具，google站长工具使用比较简单，百度的有些复杂，而且百度的检索比较慢，到目前为止，暂时还没有检索到我的网站，google已经检索到了。测试是否检索可以采用site:lianlong.website的方式进行测试。
 
-最后采用github 和coding net同步的方式进行搭建
+最后采用github 和coding net同步的方式进行搭建。采用git push -f origin master的方式强制推送
 
 ## 域名备案
 
