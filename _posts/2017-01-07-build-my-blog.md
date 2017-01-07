@@ -9,7 +9,7 @@ author: lianlong
 * content
 {:toc}
 
-从1月5号开始决定搭建自己的博客开始，经过三天，终于从一个连一句html语言不懂的小白开始，逐步了解了一些html+css+javascript，站长工具使用，百度分析和谷歌分析，CDN加速技术等一些列使用并为自己申请了一个独立域名[http://www.lianlong.website](http://lianlong.website)
+从1月5号开始决定搭建自己的博客开始，经过三天，终于从一个连一句html语言不懂的小白开始，逐步了解了一些html+css+javascript，站长工具使用，百度分析和谷歌分析，CDN加速技术等一些列使用并为自己申请了一个独立域名[http://www.lianlong.website/](http://www.lianlong.website/)
 
 
 
