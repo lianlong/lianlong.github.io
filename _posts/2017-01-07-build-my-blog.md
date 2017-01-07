@@ -11,15 +11,14 @@ author: lianlong
 
 从1月5号开始决定搭建自己的博客开始，经过三天，终于从一个连一句html语言不懂的小白开始，逐步了解了一些html+css+javascript，站长工具使用，百度分析和谷歌分析，CDN加速技术等一些列使用并为自己申请了一个独立域名[http://www.lianlong.website](src=http://lianlong.website)
 
+
+
+
 ## github page搭建问题
 
 github搭建过程中问题比较少，网上资料比较多，主要是对于自己新建的项目要采用用户名.github.io的形式，然后套用模板，提交即可，由于在window下使用，所以git可能会出现问题，在[博客](http://lianlong.website/2017/01/05/git-window-chinese/)中有详细的解释。
 
 需要注意的是在绑定自己域名时对于新申请的域名，确保设置好了域名解析服务器，并能够对域名进行有效的解析。
-
-
-
-
 
 ## 搜索引擎检索
 
