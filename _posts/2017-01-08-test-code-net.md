@@ -29,6 +29,7 @@ author: lianlong
 ```
 
 然后正常修改，在push时，由于code仓库中没有更新，所采用强制push的模式
+
 ```javascript
 	git push -f origin master
 ```
