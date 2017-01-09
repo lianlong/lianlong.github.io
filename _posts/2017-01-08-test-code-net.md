@@ -17,20 +17,20 @@ author: lianlong
 ## github上下载完整的代码
 
 ```javascript
-	git clone git@github.com:lianlong/lianlong.github.io.git
+git clone git@github.com:lianlong/lianlong.github.io.git
 ```
 
 下载好代码后，在.git/configure中加入code上托管的仓库链接 <br>
 
 ```javascript
-	[remote "origin"]
-		url = git@github.com:lianlong/lianlong.github.io.git
-		url = git@git.coding.net:anlongli/anlongli.git
+[remote "origin"]
+	url = git@github.com:lianlong/lianlong.github.io.git
+	url = git@git.coding.net:anlongli/anlongli.git
 ```
 
 然后正常修改，在push时，由于code仓库中没有更新，所采用强制push的模式
 
 ```javascript
-	git push -f origin master
+git push -f origin master
 ```
 
