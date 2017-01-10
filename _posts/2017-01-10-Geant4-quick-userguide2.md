@@ -358,20 +358,20 @@ step是Geant4}中最小的仿真单位，Geant4以step作为基本单位，统�
 	    && post_volume == fDetConstruction->GetVolume('W'))
 	{
 		G4double mass = step->GetPreStepPoint()->GetMass();
-		G4double energy = step->GetPreStepPoint()->GetKineticEnergy();
+		G4double energy = step->GetPreStepPoint()	->GetKineticEnergy();
 		G4String pname = track->GetParticleDefinition()->GetParticleName();
 		if((mass==0 && pname=="gamma")||(mass!=0))
 		{
-		analysisManager->FillNtupleDColumn(2, 0, x/mm);
-		analysisManager->FillNtupleDColumn(2, 1, y/mm);
-		analysisManager->FillNtupleDColumn(2, 2, z/mm);
-		analysisManager->FillNtupleDColumn(2, 3, theta);
-		analysisManager->FillNtupleDColumn(2, 4, mass/MeV);
-		analysisManager->FillNtupleDColumn(2, 5, energy/MeV);
-		analysisManager->FillNtupleIColumn(2, 6, trackID);
+			analysisManager->FillNtupleDColumn(2, 0, x/mm);
+			analysisManager->FillNtupleDColumn(2, 1, y/mm);
+			analysisManager->FillNtupleDColumn(2, 2, z/mm);
+			analysisManager->FillNtupleDColumn(2, 3, theta);
+			analysisManager->FillNtupleDColumn(2, 4, mass/MeV);
+			analysisManager->FillNtupleDColumn(2, 5, energy/MeV);
+			analysisManager->FillNtupleIColumn(2, 6, trackID);
 		analysisManager->AddNtupleRow(2);
-	    }
-	}
+		}
+		}
 
 ```
 
