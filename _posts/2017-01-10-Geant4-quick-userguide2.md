@@ -67,9 +67,10 @@ Randomize.hh和TRandom3.hh用于产生随机数。<br/>
 
 ```
 
-接下来这部分用于产生名称空间，用户交互接口等，无需关注过多，需要指出的是Geant4 支持多线程运行，其中的变量nTreads表示用户需要运行线程的个数，用户可以根据自己的服务器配置和资源情况设置初始值，这里设置为10.<br />
+接下来这部分用于产生名称空间，用户交互接口等，无需关注过多，需要指出的是Geant4 支持多线程运行，其中的变量nTreads表示用户需要运行线程的个数，用户可以根据自己的服务器配置和资源情况设置初始值，这里设置为10.
+<br/>
 
-```javascipt
+```javascript
 
 	namespace {
 	void PrintUsage() {
@@ -112,7 +113,7 @@ Randomize.hh和TRandom3.hh用于产生随机数。<br/>
 
 ```
 
-该部分代码实现的功能是对Geant4建立运行管理对象，初始化探测器结构，将探测器结构注册到runManager中，建立物理过程对象physics和行为初始化对象actionInitialization，然后将这三个对象注册到runManager中，然后runManager\-\textgreater Initialize()对内核进行初始化，建立探测器结构，通过物理过程搜索相应的数据，并对用户行为进行初始化。runManager\-\textgreater Initialize()后的代码是实现用户命令和内核的交互，对于所有G4 程序基本一样，所以不再分析，最后删除runManager管理类对象，将资源交付给操作系统。本文后续的分析也基本是基于G4的运行过程进行分析。
+该部分代码实现的功能是对Geant4建立运行管理对象，初始化探测器结构，将探测器结构注册到runManager中，建立物理过程对象physics和行为初始化对象actionInitialization，然后将这三个对象注册到runManager中，然后runManager\-\textgreater Initialize()对内核进行初始化，建立探测器结构，通过物理过程搜索相应的数据，并对用户行为进行初始化。runManager\-\textgreater Initialize()后的代码是实现用户命令和内核的交互，对于所有G4 程序基本一样，所以不再分析，最后删除runManager管理类对象，将资源交付给操作系统。本文后续的分析也基本是基于G4的运行过程进行分析。<br />
 
 ```javascript
 
@@ -236,7 +237,8 @@ Randomize.hh和TRandom3.hh用于产生随机数。<br/>
 
 接下来依次定义了粒子的入射位置，入射能散，角度散射，最后通过particleGun\-\textgreater GeneratePrimaryVertex(anEvent)注册顶点，该命令必须在所有粒子信息定义后执行。为了能够实现复杂的比如高斯分布等数学函数，在头文件中调用了TMath.h等相关文件。
 
-```javascipt
+
+```javascript
 
 	G4double sigma = 2;
 	TRandom3 r(0);
@@ -273,7 +275,7 @@ Randomize.hh和TRandom3.hh用于产生随机数。<br/>
 
 在Geant4中，Run是一个最大的模拟单位，一个run由一些列事件(event)组成，它是G4Run的一个对象，有G4RunManager的方法beamOn()启动，用户可以在此基础上构建用户自定义run行为，MicrobeamRunAction.cc继承自G4UserRunAction，这个基类有两个虚拟方法beginOfRunAction()和endOfRunAction(),前者在beamOn调用之前用于初始化数据，登记root统计图等任务，后者在beamOn运行结束后调用，用于存储或者输出统计结果。考虑到质子入射W打靶试验中需要统计各个截面的数据，所以利用C++泛函数编程的方法定义如下map作为成员用于统计粒子类型和粒子数目：
 
-```javascirpt
+```javascript
 
 	std::map<G4String, G4double> particleList;
 	std::map<G4String, G4int> particleListN
@@ -282,7 +284,7 @@ Randomize.hh和TRandom3.hh用于产生随机数。<br/>
 
 下面代码是MicrobeamRunAction构造函数的一部分},G4AnalysisManager用于构建root软件分析管理对象，analysisManager\-\textgreater SetVerboseLevel(1)表示显示精度的级别,后面几行用于创建元组，建立root管理的表头。然后在beginOfRunAction定义了需要输出的文件，在EndOfRunAction方法中，将需要的数据存储到文件中，并关闭了root等文件，  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance()用于找到分析管理对象指针，用于进一步操作。
 
-```javascrpit
+```javascript
 
 	 G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
 	  G4cout << "Using " << analysisManager->GetType() << G4endl;
