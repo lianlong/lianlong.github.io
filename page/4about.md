@@ -27,7 +27,7 @@ type: page
 
 ## 联系我
 
-* GitHub：[Gaohaoyang](https://github.com/Gaohaoyang)
+* GitHub：[lianlong](https://github.com/lianlong)
 * email：lianlong_2014@163.com
 
 ### Update Log
