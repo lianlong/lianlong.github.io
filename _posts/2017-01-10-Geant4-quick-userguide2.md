@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Geant4 入门教程(一)"
+title:  "Geant4 入门教程(二)"
 categories: Geant4入门
 tags:  Geant4入门 
 author: lianlong
@@ -12,7 +12,7 @@ author: lianlong
 
 ## 质子打靶Microbeam52mm代码说明
 
-###代码结构
+### 代码结构
 
 如图为代码的结构图，代码中有两个文件夹include和src分别表示头文件的位置和源代码的位置，include文件中用于构建对象和声明的成员函数，src文件夹中对应的文件用于具体实现成员函数的功能，主函数在Microbeam.cc 文件中，run.png是图形化界面的一个图标，CmakeLists.txt 是cmake 所需要的文件，gui.mac、icon.mac、init\_vis.mac、vis.mac 是用于可视化的宏命令文件，Geant4 在主函数中有调用，方便按照用户的需求生成需要的图形化界面，run.mac，run01.mac，run02.mac是直接采用宏命令仿真，不显示图形化界面。
 
@@ -42,6 +42,7 @@ author: lianlong
 Randomize.hh和TRandom3.hh用于产生随机数。<br/>
 
 ```javascript
+
     #include "MicrobeamDetectorConstruction.hh"
     #include "MicrobeamActionInitialization.hh"
     #include <time.h>
@@ -49,7 +50,7 @@ Randomize.hh和TRandom3.hh用于产生随机数。<br/>
     #include "G4MTRunManager.hh"
     #else
     #include "G4RunManager.hh"
-    #endi
+    #endif
     #include "G4UImanager.hh"
     #include "G4UIcommand.hh"
     #include "FTFP_BERT.hh"
@@ -63,25 +64,25 @@ Randomize.hh和TRandom3.hh用于产生随机数。<br/>
 
     #include "MicrobeamPrimaryGeneratorAction.hh"
     #include "Randomize.hh"
+
 ```
 
 接下来这部分用于产生名称空间，用户交互接口等，无需关注过多，需要指出的是Geant4 支持多线程运行，其中的变量nTreads表示用户需要运行线程的个数，用户可以根据自己的服务器配置和资源情况设置初始值，这里设置为10.
 
 ```javascipt
-namespace {
-void PrintUsage() {
-G4cerr << " Usage: " << G4endl;
-G4cerr << " exampleT01 [-m macro ] [-u UIsession] [-t nThreads]" << G4endl;
-G4cerr << "   note: -t option is available only for multi-threaded mode."
-	   << G4endl;
-	  }
-}
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+	namespace {
+	void PrintUsage() {
+	G4cerr << " Usage: " << G4endl;
+	G4cerr << " exampleT01 [-m macro ] [-u UIsession] [-t nThreads]" << G4endl;
+	G4cerr << "   note: -t option is available only for multi-threaded mode."
+		   << G4endl;
+		  }
+	}
+
     int main(int argc,char** argv)
     {
-  // Evaluate arguments
-  //
-  if ( argc > 7 ) {
+	if ( argc > 7 ) {
     PrintUsage();
     return 1;
     }
@@ -111,65 +112,67 @@ G4cerr << "   note: -t option is available only for multi-threaded mode."
 ```
 该部分代码实现的功能是对Geant4建立运行管理对象，初始化探测器结构，将探测器结构注册到runManager中，建立物理过程对象physics和行为初始化对象actionInitialization，然后将这三个对象注册到runManager中，然后runManager\-\textgreater Initialize()对内核进行初始化，建立探测器结构，通过物理过程搜索相应的数据，并对用户行为进行初始化。runManager\-\textgreater Initialize()后的代码是实现用户命令和内核的交互，对于所有G4 程序基本一样，所以不再分析，最后删除runManager管理类对象，将资源交付给操作系统。本文后续的分析也基本是基于G4的运行过程进行分析。
 ```javascript
-#ifdef G4MULTITHREADED
-G4MTRunManager * runManager = new G4MTRunManager;
-if ( nThreads > 0 ) {
-runManager->SetNumberOfThreads(nThreads);
- }
-  #else
-  G4RunManager * runManager = new G4RunManager;
-  #endif
-  // set mandatory initialization classes
-  MicrobeamDetectorConstruction* detector = new MicrobeamDetectorConstruction;
-  runManager->SetUserInitialization(detector);
-//G4VUserPhysicsList* physics = new QBBC;
-  G4VUserPhysicsList* physics = new QGSP_BIC;
-  //G4VUserPhysicsList* physics = new QGSP_INCLXX;
-  //G4VUserPhysicsList* physics = new QGSP_BERT_HP;
-  //G4VUserPhysicsList* physics = new FTFP_BERT;
-  //G4VUserPhysicsList* physics = new ExN01PhysicsList;
-  runManager->SetUserInitialization(physics)
 
-  MicrobeamActionInitialization* actionInitialization
+	#ifdef G4MULTITHREADED
+	G4MTRunManager * runManager = new G4MTRunManager;
+	if ( nThreads > 0 ) {
+	runManager->SetNumberOfThreads(nThreads);
+	 }
+ 	 #else
+	  G4RunManager * runManager = new G4RunManager;
+	  #endif
+ 	 // set mandatory initialization classes
+ 	 MicrobeamDetectorConstruction* detector = new MicrobeamDetectorConstruction;
+	  runManager->SetUserInitialization(detector);
+	//G4VUserPhysicsList* physics = new QBBC;
+	  G4VUserPhysicsList* physics = new QGSP_BIC;
+	  //G4VUserPhysicsList* physics = new QGSP_INCLXX;
+	  //G4VUserPhysicsList* physics = new QGSP_BERT_HP;
+ 	 //G4VUserPhysicsList* physics = new FTFP_BERT;
+	  //G4VUserPhysicsList* physics = new ExN01PhysicsList;
+	   runManager->SetUserInitialization(physics)
+
+	  MicrobeamActionInitialization* actionInitialization
 	  =new MicrobeamActionInitialization(detector);
-  runManager->SetUserInitialization(actionInitialization);
+	runManager->SetUserInitialization(actionInitialization);
 
-  // Initialize G4 kernel
-  runManager->Initialize();
+	// Initialize G4 kernel
+	runManager->Initialize();
 
-#ifdef G4VIS_USE
-  // Initialize visualization
-  G4VisManager* visManager = new G4VisExecutive;
-  visManager->Initialize();
-#endif
-  // Get the pointer to the UI manager and set verbosities
-  //
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();
-  if ( macro.size())
-  {
+	#ifdef G4VIS_USE
+	// Initialize visualization
+	G4VisManager* visManager = new G4VisExecutive;
+	visManager->Initialize();
+	#endif
+	// Get the pointer to the UI manager and set verbosities
+	//
+	G4UImanager* UImanager = G4UImanager::GetUIpointer();
+	if ( macro.size())
+	{
 	  //batch mode
 	  G4String command = "/control/execute ";
 	  UImanager->ApplyCommand(command+macro);
-  }
-  else
-  {
-	  //interactive mode: define UI session
-#ifdef G4UI_USE
-	  G4UIExecutive* ui = new G4UIExecutive(argc, argv, session);
-#ifdef G4VIS_USE
-	  UImanager->ApplyCommand("/control/execute init_vis.mac");
-#endif
-	  if (ui->IsGUI())
-		UImanager->ApplyCommand("/control/execute gui.mac");
-	  ui->SessionStart();
-	  delete ui;
-#endif
-  }
-#ifdef G4VIS_USE
-  delete visManager;
-#endif
-  delete runManager;
-return 0;
+  	}
+ 	else
+	  	{
+		  //interactive mode: define UI session
+		#ifdef G4UI_USE
+		  G4UIExecutive* ui = new G4UIExecutive(argc, argv, session);
+		#ifdef G4VIS_USE
+		  UImanager->ApplyCommand("/control/execute init_vis.mac");
+	#endif
+		  if (ui->IsGUI())
+			UImanager->ApplyCommand("/control/execute gui.mac");
+		  ui->SessionStart();
+		  delete ui;
+	#endif
+  	}
+	#ifdef G4VIS_USE
+  	delete visManager;
+	#endif
+ 	 delete runManager;
+	return 0;
+
 ```
 
 ### 探测器结构的建立
@@ -179,35 +182,36 @@ return 0;
 
 ```javascript
 
-//`真空的定义`
-density = universe_mean_density; //from PhysicalConstants.h
-pressure = 1.e-5*pascal;
-temperature = 300*kelvin;
-G4Material* Vacuum = new G4Material(name="Galactic",z=1.,
-                  a=1.01*g/mole, density, kStateGas,temperature,pressure)
-//W`材料的定义`
-G4Material* Wolfram = man->FindOrBuildMaterial("G4_W");
-a = 14.01*g/mole;
-G4Element* elN  = new G4Element(name="Nitrogen", symbol="N", z=7., a);
-G4Element* Si = new G4Element("Silicon",symbol="Si" , z= 14., a= 28.09*g/mole);
-G4Element* O  = new G4Element("Oxygen"  ,symbol="O" , z= 8., a= 16.00*g/mole);
-//`氧化硅的定义`
-G4Material* SiO2 =
-new G4Material("quartz", density= 2.200*g/cm3, ncomponents=2);
-SiO2->AddElement(Si, natoms=1);
-SiO2->AddElement(O, natoms=2)
+	//`真空的定义`
+	density = universe_mean_density; //from PhysicalConstants.h
+	pressure = 1.e-5*pascal;
+	temperature = 300*kelvin;
+	G4Material* Vacuum = new G4Material(name="Galactic",z=1.,
+	                  a=1.01*g/mole, density, kStateGas,temperature,pressure)
+	//W`材料的定义`
+	G4Material* Wolfram = man->FindOrBuildMaterial("G4_W");
+	a = 14.01*g/mole;
+	G4Element* elN  = new G4Element(name="Nitrogen", symbol="N", z=7., a);
+	G4Element* Si = new G4Element("Silicon",symbol="Si" , z= 14., a= 28.09*g/mole);
+	G4Element* O  = new G4Element("Oxygen"  ,symbol="O" , z= 8., a= 16.00*g/mole);
+	//`氧化硅的定义`
+	G4Material* SiO2 =
+	new G4Material("quartz", density= 2.200*g/cm3, ncomponents=2);
+	SiO2->AddElement(Si, natoms=1);
+	SiO2->AddElement(O, natoms=2)
 ```
 
 探测器要求定义探测器本身几何、材料、可视化属性及一些用户特定需求。G4采用逻辑体(Logical Volume)的概念来管理这些探测器单元属性的描述，使物理体(Physics Volume) 来管理探测器单元空间位置和它们之间的逻辑关系描述，使用实体(Solids Volume)的概念来管理探测器单元自身的几何描述。Geant4中最大结构是World体，所有其他的几何体都是该``世界子体，Geant4必须先建立World体，然后将其他所有体定义到母体中。对于其他几何体，先要定义一个实体，确定几何形状和大小；再定义逻辑体，为实体添加材料，；最后将这个逻辑体放置在一定的空间坐标中，得到物理体，Geant4中所有的结构都是建立在一个世界体中，以世界的中心为坐标原点，水平向右为y轴正半轴，垂直向上为x轴正半轴,垂直于桌面向上是z轴的正半轴。下面代码为典型的40mm*40mm*52mm的W块在探测器中的定义,首先创建了一个实体Box,注意其中的长宽高都取半长，然后定义了逻辑体WLog，确定了材料为W，最后将该逻辑体放置到坐标(0,0,0)处。它的母体是worldLog，G4PVPlacement中第一个变量表示旋转向量，第二个参数表示中心坐标位置，第三个参数表示其逻辑体，第四个参数表示该实体的名称，可以是任意字符串，第五个参数表示其母体，第六个参数暂时预留,设置为false,第七个参数表示复制次数。
 
 ```javascript
-G4double w_hx = 40*mm;
-G4double w_hy = 52.*mm;
-G4double w_hz = 40*mm;
-G4Box* WBox = new G4Box("W_box", w_hx/2, w_hy/2, w_hz/2);
-WLog = new G4LogicalVolume(WBox, Wolfram, "W_log");
-G4VPhysicalVolume* WPhy = new G4PVPlacement(0, G4ThreeVector(0,0,0),
-                              WLog, "W", worldLog, false, 0)
+
+	G4double w_hx = 40*mm;
+	G4double w_hy = 52.*mm;
+	G4double w_hz = 40*mm;
+	G4Box* WBox = new G4Box("W_box", w_hx/2, w_hy/2, w_hz/2);
+	WLog = new G4LogicalVolume(WBox, Wolfram, "W_log");
+	G4VPhysicalVolume* WPhy = new G4PVPlacement(0, G4ThreeVector(0,0,0),
+	                              WLog, "W", worldLog, false, 0)
 ```
 
 ### 初级粒子产生器行为(MicrobeamPrimaryGeneratorAction.cc)
@@ -215,41 +219,44 @@ G4VPhysicalVolume* WPhy = new G4PVPlacement(0, G4ThreeVector(0,0,0),
 初级粒子的种类、能量、动量、发散角、能散等参数都是在MicrobeamPrimary\\GeneratorAction.cc文件中定义的，该对象继承自G4VUserPrimaryGeneratorAction.hh,通过GeneratePrimaries方法来实现初级粒子属性的改变。G4是通过G4ParticleGun.hh粒子枪对初级粒子进行管理，所以在MicrobeamPrimaryGeneratorAction的构造函数中首先建立了建立对象G4ParticleGun，然后将相关信息注册到该粒子枪中，实现初级入射粒子的定义。如下代码，表示定义粒子类型为质子。
 
 ```javascript
-G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-G4String particleName;
-particleGun->SetParticleDefinition(particleTable->FindParticle                                   (particleName="proton"));
+
+	G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
+	G4String particleName;
+	particleGun->SetParticleDefinition(particleTable->FindParticle                                   (particleName="proton"));
+
 ```
 
 接下来依次定义了粒子的入射位置，入射能散，角度散射，最后通过particleGun\-\textgreater GeneratePrimaryVertex(anEvent)注册顶点，该命令必须在所有粒子信息定义后执行。为了能够实现复杂的比如高斯分布等数学函数，在头文件中调用了TMath.h等相关文件。
 
 ```javascipt
-G4double sigma = 2;
-TRandom3 r(0);
-G4double beamRadius = 2*mm;
-G4double x = r.Gaus(0,beamRadius/sigma);
-G4double y = fDetConstruction->fSourceY;
-G4double z = r.Gaus(0,beamRadius/sigma);
-while(x*x+z*z>=beamRadius*beamRadius)
-{
-x = r.Gaus(0,beamRadius/sigma);
-z = r.Gaus(0,beamRadius/sigma);
-}
-particleGun->SetParticlePosition(G4ThreeVector(x,y,z));
-G4double energySpd = 1E-3;
-G4double energycenter = 300*MeV;
-G4double energy = r.Gaus(energycenter, energySpd/sigma*energycenter);
-particleGun->SetParticleEnergy(energy);
-G4ThreeVector v(0,1,0);
-G4double maxtheta = 0.005;
-G4double theta = r.Gaus(0,maxtheta/sigma);
-while(TMath::Abs(theta)>=maxtheta)
-theta = r.Gaus(0,maxtheta/sigma);
-G4double phi = 2*TMath::Pi()*r.Rndm();
-v.setRThetaPhi(1,theta,phi);
-v.rotateX(-90*degree);
-particleGun->SetParticleMomentumDirection(v);
 
-particleGun->GeneratePrimaryVertex(anEvent);
+	G4double sigma = 2;
+	TRandom3 r(0);
+	G4double beamRadius = 2*mm;
+	G4double x = r.Gaus(0,beamRadius/sigma);
+	G4double y = fDetConstruction->fSourceY;
+	G4double z = r.Gaus(0,beamRadius/sigma);
+	while(x*x+z*z>=beamRadius*beamRadius)
+	{
+	x = r.Gaus(0,beamRadius/sigma);
+	z = r.Gaus(0,beamRadius/sigma);
+	}
+	particleGun->SetParticlePosition(G4ThreeVector(x,y,z));
+	G4double energySpd = 1E-3;
+	G4double energycenter = 300*MeV;
+	G4double energy = r.Gaus(energycenter, energySpd/sigma*energycenter);
+	particleGun->SetParticleEnergy(energy);
+	G4ThreeVector v(0,1,0);
+	G4double maxtheta = 0.005;
+	G4double theta = r.Gaus(0,maxtheta/sigma);
+	while(TMath::Abs(theta)>=maxtheta)
+	theta = r.Gaus(0,maxtheta/sigma);
+	G4double phi = 2*TMath::Pi()*r.Rndm();
+	v.setRThetaPhi(1,theta,phi);
+	v.rotateX(-90*degree);
+	particleGun->SetParticleMomentumDirection(v);
+	
+	particleGun->GeneratePrimaryVertex(anEvent);
 ```
 
 ### 用户定义类型RunAction(MicrobeamRunAction.cc)
@@ -257,26 +264,28 @@ particleGun->GeneratePrimaryVertex(anEvent);
 在Geant4中，Run是一个最大的模拟单位，一个run由一些列事件(event)组成，它是G4Run的一个对象，有G4RunManager的方法beamOn()启动，用户可以在此基础上构建用户自定义run行为，MicrobeamRunAction.cc继承自G4UserRunAction，这个基类有两个虚拟方法beginOfRunAction()和endOfRunAction(),前者在beamOn调用之前用于初始化数据，登记root统计图等任务，后者在beamOn运行结束后调用，用于存储或者输出统计结果。考虑到质子入射W打靶试验中需要统计各个截面的数据，所以利用C++泛函数编程的方法定义如下map作为成员用于统计粒子类型和粒子数目：
 
 ```javascirpt
-std::map<G4String, G4double> particleList;
-std::map<G4String, G4int> particleListN
+
+	std::map<G4String, G4double> particleList;
+	std::map<G4String, G4int> particleListN
 ```
 
 下面代码是MicrobeamRunAction构造函数的一部分},G4AnalysisManager用于构建root软件分析管理对象，analysisManager\-\textgreater SetVerboseLevel(1)表示显示精度的级别,后面几行用于创建元组，建立root管理的表头。然后在beginOfRunAction定义了需要输出的文件，在EndOfRunAction方法中，将需要的数据存储到文件中，并关闭了root等文件，  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance()用于找到分析管理对象指针，用于进一步操作。
 
 ```javascrpit
- G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  G4cout << "Using " << analysisManager->GetType() << G4endl;
-  // Create directories
-  analysisManager->SetVerboseLevel(1);
-  // Creating ntuple
-  analysisManager->CreateNtuple("Vertex", "Vertex Info");
-  analysisManager->CreateNtupleDColumn(0,"x");
-  analysisManager->CreateNtupleDColumn(0,"y");
-  analysisManager->CreateNtupleDColumn(0,"z");
-  analysisManager->CreateNtupleDColumn(0,"Theta");
-  analysisManager->CreateNtupleDColumn(0,"p");
-  analysisManager->CreateNtupleDColumn(0,"E");
-  analysisManager->FinishNtuple(0);
+
+	 G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+	  G4cout << "Using " << analysisManager->GetType() << G4endl;
+	  // Create directories
+	  analysisManager->SetVerboseLevel(1);
+	  // Creating ntuple
+	  analysisManager->CreateNtuple("Vertex", "Vertex Info");
+	  analysisManager->CreateNtupleDColumn(0,"x");
+	  analysisManager->CreateNtupleDColumn(0,"y");
+	  analysisManager->CreateNtupleDColumn(0,"z");
+	  analysisManager->CreateNtupleDColumn(0,"Theta");
+	  analysisManager->CreateNtupleDColumn(0,"p");
+	  analysisManager->CreateNtupleDColumn(0,"E");
+	  analysisManager->FinishNtuple(0);
 ```
 
 ### 用户定义类型事件EventAction(MicrobeamEventAction.cc)
@@ -284,19 +293,20 @@ std::map<G4String, G4int> particleListN
 事件是一个包含所有被模拟事件的输入输出信息的类的实例，通俗的来讲，一个粒子从入射到相关所有的反应结束，即为一个事件，事件用于统计一个粒子入射后的相关反应情况，可以统计初级粒子属性，或者通过step中传递过来的参数，累加一个事件中总的能量变化等功能。在本代码中主要是在事件结束后完成了初级粒子相关信息的统计，主要涉及到统计中Ntuple的使用，其中前三行代码分别获得分析管理类，粒子顶点，初级粒子对象指针，方便调用其方法，然后通过FillNtupleDColumn方法将数据填充到Ntuple中，第一参数0表示添加到元表的第一行中，第二个参数表示添加Ntuple对应的列中，第三个参数表示输入相应的值，这部分具体可以查看生成的root文件，可以很明了的看到相应的区别，这里统计了初级粒子的X、Y、Z轴坐标，散射角度、总的动量和动能。
 
 ```javascript
-G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();	
-G4PrimaryVertex* gpVertex = event->GetPrimaryVertex();
-G4PrimaryParticle* gpParticle = gpVertex->GetPrimary();
-G4ThreeVector pd =  gpParticle->GetMomentumDirection();
-G4double theta = acos(pd.getY()/pd.getR());
-// fill ntuple
-analysisManager->FillNtupleDColumn(0, 0, gpVertex->GetX0()/mm);
-analysisManager->FillNtupleDColumn(0, 1, gpVertex->GetY0()/mm);
-analysisManager->FillNtupleDColumn(0, 2, gpVertex->GetZ0()/mm);
-analysisManager->FillNtupleDColumn(0, 3, theta);
-analysisManager->FillNtupleDColumn(0, 4, gpParticle->GetTotalMomentum()/MeV);
-analysisManager->FillNtupleDColumn(0, 5, gpParticle->GetKineticEnergy()/MeV);
-analysisManager->AddNtupleRow(0);
+
+	G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();	
+	G4PrimaryVertex* gpVertex = event->GetPrimaryVertex();
+	G4PrimaryParticle* gpParticle = gpVertex->GetPrimary();
+	G4ThreeVector pd =  gpParticle->GetMomentumDirection();
+	G4double theta = acos(pd.getY()/pd.getR());
+	// fill ntuple
+	analysisManager->FillNtupleDColumn(0, 0, gpVertex->GetX0()/mm);
+	analysisManager->FillNtupleDColumn(0, 1, gpVertex->GetY0()/mm);
+	analysisManager->FillNtupleDColumn(0, 2, gpVertex->GetZ0()/mm);
+	analysisManager->FillNtupleDColumn(0, 3, theta);
+	analysisManager->FillNtupleDColumn(0, 4, gpParticle->GetTotalMomentum()/MeV);
+	analysisManager->FillNtupleDColumn(0, 5, gpParticle->GetKineticEnergy()/MeV);
+	analysisManager->AddNtupleRow(0);
 ```
 
 ### 用户自定义类型StepAction(MicrobeamSteppingAction.cc)
@@ -305,46 +315,48 @@ step是Geant4}中最小的仿真单位，Geant4以step作为基本单位，统�
 如下代码表示获得当前step开始点和结束点的物理体、当前step的轨迹对象指针(track是比step稍微打一点的仿真单位，多个step构成一个track)、总能量、动能、位置、粒子名称、动量方向。
 
 ```javascript
- G4VPhysicalVolume* pre_volume
-    = step->GetPreStepPoint()->GetTouchableHandle()->GetVolume();
-  G4VPhysicalVolume* post_volume
-    = step->GetPostStepPoint()->GetTouchableHandle()->GetVolume();
-  G4Track* track = step->GetTrack();
-  // energy deposit
-  G4double edep = step->GetTotalEnergyDeposit();
-  G4ThreeVector p = step->GetPreStepPoint()->GetPosition();
-  G4double e=step->GetPreStepPoint()->GetKineticEnergy();
-  G4String name = step->GetTrack()->GetDefinition()->GetParticleName();
-  G4double x=p.getX();
-  G4double y=p.getY();
-  G4double z=p.getZ();
-  G4ThreeVector pd = step->GetPreStepPoint()->GetMomentumDirection();
-  G4double theta = acos(pd.getY()/pd.getR())
+
+	 G4VPhysicalVolume* pre_volume
+	    = step->GetPreStepPoint()->GetTouchableHandle()->GetVolume();
+	  G4VPhysicalVolume* post_volume
+	    = step->GetPostStepPoint()->GetTouchableHandle()->GetVolume();
+	  G4Track* track = step->GetTrack();
+	  // energy deposit
+	  G4double edep = step->GetTotalEnergyDeposit();
+	  G4ThreeVector p = step->GetPreStepPoint()->GetPosition();
+	  G4double e=step->GetPreStepPoint()->GetKineticEnergy();
+	  G4String name = step->GetTrack()->GetDefinition()->GetParticleName();
+	  G4double x=p.getX();
+	  G4double y=p.getY();
+	  G4double z=p.getZ();
+	  G4ThreeVector pd = step->GetPreStepPoint()->GetMomentumDirection();
+	  G4double theta = acos(pd.getY()/pd.getR())
 ```
 
 接下来这段代码用于判断当前step前一个物理体是A，后一个物理体是W时，执行if中的语句，即判断通过A界面的step，然后统计此时粒子的相关信息，输入到root文件中，同时对runAction中构建的统计粒子类型和数目的map进行累加.
 
 ```javascript
-G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-G4int trackID = track->GetTrackID();
-if(pre_volume == fDetConstruction->GetVolume('A')
-    && post_volume == fDetConstruction->GetVolume('W'))
-{
-	G4double mass = step->GetPreStepPoint()->GetMass();
-	G4double energy = step->GetPreStepPoint()->GetKineticEnergy();
-	G4String pname = track->GetParticleDefinition()->GetParticleName();
-	if((mass==0 && pname=="gamma")||(mass!=0))
+
+	G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+	G4int trackID = track->GetTrackID();
+	if(pre_volume == fDetConstruction->GetVolume('A')
+	    && post_volume == fDetConstruction->GetVolume('W'))
 	{
-	analysisManager->FillNtupleDColumn(2, 0, x/mm);
-	analysisManager->FillNtupleDColumn(2, 1, y/mm);
-	analysisManager->FillNtupleDColumn(2, 2, z/mm);
-	analysisManager->FillNtupleDColumn(2, 3, theta);
-	analysisManager->FillNtupleDColumn(2, 4, mass/MeV);
-	analysisManager->FillNtupleDColumn(2, 5, energy/MeV);
-	analysisManager->FillNtupleIColumn(2, 6, trackID);
-	analysisManager->AddNtupleRow(2);
-    }
-}
+		G4double mass = step->GetPreStepPoint()->GetMass();
+		G4double energy = step->GetPreStepPoint()->GetKineticEnergy();
+		G4String pname = track->GetParticleDefinition()->GetParticleName();
+		if((mass==0 && pname=="gamma")||(mass!=0))
+		{
+		analysisManager->FillNtupleDColumn(2, 0, x/mm);
+		analysisManager->FillNtupleDColumn(2, 1, y/mm);
+		analysisManager->FillNtupleDColumn(2, 2, z/mm);
+		analysisManager->FillNtupleDColumn(2, 3, theta);
+		analysisManager->FillNtupleDColumn(2, 4, mass/MeV);
+		analysisManager->FillNtupleDColumn(2, 5, energy/MeV);
+		analysisManager->FillNtupleIColumn(2, 6, trackID);
+		analysisManager->AddNtupleRow(2);
+	    }
+	}
 ```
 
 ###其他用户行为
