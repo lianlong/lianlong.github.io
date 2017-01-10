@@ -109,8 +109,11 @@ Randomize.hh和TRandom3.hh用于产生随机数。<br/>
       G4Random::setTheEngine(new CLHEP::RanecuEngine);
       G4Random::setTheSeed((int)time(0));
       TRandom3 r0(0);
+
 ```
+
 该部分代码实现的功能是对Geant4建立运行管理对象，初始化探测器结构，将探测器结构注册到runManager中，建立物理过程对象physics和行为初始化对象actionInitialization，然后将这三个对象注册到runManager中，然后runManager\-\textgreater Initialize()对内核进行初始化，建立探测器结构，通过物理过程搜索相应的数据，并对用户行为进行初始化。runManager\-\textgreater Initialize()后的代码是实现用户命令和内核的交互，对于所有G4 程序基本一样，所以不再分析，最后删除runManager管理类对象，将资源交付给操作系统。本文后续的分析也基本是基于G4的运行过程进行分析。
+
 ```javascript
 
 	#ifdef G4MULTITHREADED
@@ -175,7 +178,10 @@ Randomize.hh和TRandom3.hh用于产生随机数。<br/>
 
 ```
 
+
 ### 探测器结构的建立
+
+
 
 探测器结构的建模需要进行探测器材料的定义和几何结构的定义,该对象继承自G4VUserDetectorConstruction.hh主要通过 G4VPhysicalVolume* Construct()方法实现探测器的构造。
 \par{Geant4}中设计了三个重要的类用于定义材料：G4Isotope、G4Element、G4Material。G4Isotope类用于描述原子本身的性质，比如原子序数、摩尔质量等；G4Element用于描述元素的性质，比如有效核子数、原子丰度等，一般情况下不用G4Isotope定义原子，直接调用G4Element定义元素，采用默认的核素分布，除非要修改元素中各个同位素的相对丰度；G4Material用于描述物质的宏观性质，比如物质的状态、混合物混合情况等。下面代码为典型的几种定义材料的方法：
@@ -199,6 +205,7 @@ Randomize.hh和TRandom3.hh用于产生随机数。<br/>
 	new G4Material("quartz", density= 2.200*g/cm3, ncomponents=2);
 	SiO2->AddElement(Si, natoms=1);
 	SiO2->AddElement(O, natoms=2)
+
 ```
 
 探测器要求定义探测器本身几何、材料、可视化属性及一些用户特定需求。G4采用逻辑体(Logical Volume)的概念来管理这些探测器单元属性的描述，使物理体(Physics Volume) 来管理探测器单元空间位置和它们之间的逻辑关系描述，使用实体(Solids Volume)的概念来管理探测器单元自身的几何描述。Geant4中最大结构是World体，所有其他的几何体都是该``世界子体，Geant4必须先建立World体，然后将其他所有体定义到母体中。对于其他几何体，先要定义一个实体，确定几何形状和大小；再定义逻辑体，为实体添加材料，；最后将这个逻辑体放置在一定的空间坐标中，得到物理体，Geant4中所有的结构都是建立在一个世界体中，以世界的中心为坐标原点，水平向右为y轴正半轴，垂直向上为x轴正半轴,垂直于桌面向上是z轴的正半轴。下面代码为典型的40mm*40mm*52mm的W块在探测器中的定义,首先创建了一个实体Box,注意其中的长宽高都取半长，然后定义了逻辑体WLog，确定了材料为W，最后将该逻辑体放置到坐标(0,0,0)处。它的母体是worldLog，G4PVPlacement中第一个变量表示旋转向量，第二个参数表示中心坐标位置，第三个参数表示其逻辑体，第四个参数表示该实体的名称，可以是任意字符串，第五个参数表示其母体，第六个参数暂时预留,设置为false,第七个参数表示复制次数。
@@ -212,6 +219,7 @@ Randomize.hh和TRandom3.hh用于产生随机数。<br/>
 	WLog = new G4LogicalVolume(WBox, Wolfram, "W_log");
 	G4VPhysicalVolume* WPhy = new G4PVPlacement(0, G4ThreeVector(0,0,0),
 	                              WLog, "W", worldLog, false, 0)
+
 ```
 
 ### 初级粒子产生器行为(MicrobeamPrimaryGeneratorAction.cc)
@@ -238,8 +246,8 @@ Randomize.hh和TRandom3.hh用于产生随机数。<br/>
 	G4double z = r.Gaus(0,beamRadius/sigma);
 	while(x*x+z*z>=beamRadius*beamRadius)
 	{
-	x = r.Gaus(0,beamRadius/sigma);
-	z = r.Gaus(0,beamRadius/sigma);
+		x = r.Gaus(0,beamRadius/sigma);
+		z = r.Gaus(0,beamRadius/sigma);
 	}
 	particleGun->SetParticlePosition(G4ThreeVector(x,y,z));
 	G4double energySpd = 1E-3;
@@ -257,7 +265,9 @@ Randomize.hh和TRandom3.hh用于产生随机数。<br/>
 	particleGun->SetParticleMomentumDirection(v);
 	
 	particleGun->GeneratePrimaryVertex(anEvent);
+
 ```
+
 
 ### 用户定义类型RunAction(MicrobeamRunAction.cc)
 
@@ -267,6 +277,7 @@ Randomize.hh和TRandom3.hh用于产生随机数。<br/>
 
 	std::map<G4String, G4double> particleList;
 	std::map<G4String, G4int> particleListN
+
 ```
 
 下面代码是MicrobeamRunAction构造函数的一部分},G4AnalysisManager用于构建root软件分析管理对象，analysisManager\-\textgreater SetVerboseLevel(1)表示显示精度的级别,后面几行用于创建元组，建立root管理的表头。然后在beginOfRunAction定义了需要输出的文件，在EndOfRunAction方法中，将需要的数据存储到文件中，并关闭了root等文件，  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance()用于找到分析管理对象指针，用于进一步操作。
@@ -286,7 +297,9 @@ Randomize.hh和TRandom3.hh用于产生随机数。<br/>
 	  analysisManager->CreateNtupleDColumn(0,"p");
 	  analysisManager->CreateNtupleDColumn(0,"E");
 	  analysisManager->FinishNtuple(0);
+
 ```
+
 
 ### 用户定义类型事件EventAction(MicrobeamEventAction.cc)
 
@@ -307,6 +320,7 @@ Randomize.hh和TRandom3.hh用于产生随机数。<br/>
 	analysisManager->FillNtupleDColumn(0, 4, gpParticle->GetTotalMomentum()/MeV);
 	analysisManager->FillNtupleDColumn(0, 5, gpParticle->GetKineticEnergy()/MeV);
 	analysisManager->AddNtupleRow(0);
+
 ```
 
 ### 用户自定义类型StepAction(MicrobeamSteppingAction.cc)
@@ -331,6 +345,7 @@ step是Geant4}中最小的仿真单位，Geant4以step作为基本单位，统�
 	  G4double z=p.getZ();
 	  G4ThreeVector pd = step->GetPreStepPoint()->GetMomentumDirection();
 	  G4double theta = acos(pd.getY()/pd.getR())
+
 ```
 
 接下来这段代码用于判断当前step前一个物理体是A，后一个物理体是W时，执行if中的语句，即判断通过A界面的step，然后统计此时粒子的相关信息，输入到root文件中，同时对runAction中构建的统计粒子类型和数目的map进行累加.
@@ -357,6 +372,7 @@ step是Geant4}中最小的仿真单位，Geant4以step作为基本单位，统�
 		analysisManager->AddNtupleRow(2);
 	    }
 	}
+
 ```
 
 ###其他用户行为
