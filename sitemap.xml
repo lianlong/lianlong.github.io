@@ -1,69 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset
-      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
-            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
-
+<?xml-stylesheet type="text/xsl" href="sitemap.xsl"?>
+<!-- Free Sitemap Generator http://www.sitemapx.com -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
-  <loc>http://lianlong.website/</loc>
-  <lastmod>2017-01-10T12:47:25+00:00</lastmod>
-  <changefreq>daily</changefreq>
+<loc>http://lianlong.website/</loc>
+<priority>1.0</priority>
+<lastmod>2017-01-12T21:36:23+00:00</lastmod>
+<changefreq>Daily</changefreq>
 </url>
 <url>
-  <loc>http://lianlong.website/archive/</loc>
-  <lastmod>2017-01-10T12:47:25+00:00</lastmod>
-  <changefreq>daily</changefreq>
+<loc>http://lianlong.website/about/</loc>
+<priority>1.0</priority>
+<lastmod>2017-01-12T21:36:24+00:00</lastmod>
+<changefreq>Daily</changefreq>
 </url>
 <url>
-  <loc>http://lianlong.website/category/</loc>
-  <lastmod>2017-01-10T12:47:25+00:00</lastmod>
-  <changefreq>daily</changefreq>
+<loc>http://lianlong.website/archive/</loc>
+<priority>1.0</priority>
+<lastmod>2017-01-12T21:36:23+00:00</lastmod>
+<changefreq>Daily</changefreq>
 </url>
 <url>
-  <loc>http://lianlong.website/tag/</loc>
-  <lastmod>2017-01-10T12:47:25+00:00</lastmod>
-  <changefreq>daily</changefreq>
+<loc>http://lianlong.website/category/</loc>
+<priority>1.0</priority>
+<lastmod>2017-01-12T21:36:23+00:00</lastmod>
+<changefreq>Daily</changefreq>
 </url>
 <url>
-  <loc>http://lianlong.website/collection/</loc>
-  <lastmod>2017-01-10T12:47:25+00:00</lastmod>
-  <changefreq>daily</changefreq>
+<loc>http://lianlong.website/collection/</loc>
+<priority>1.0</priority>
+<lastmod>2017-01-12T21:36:24+00:00</lastmod>
+<changefreq>Daily</changefreq>
 </url>
 <url>
-  <loc>http://lianlong.website/demo/</loc>
-  <lastmod>2017-01-10T12:47:25+00:00</lastmod>
-  <changefreq>daily</changefreq>
+<loc>http://lianlong.website/demo/</loc>
+<priority>1.0</priority>
+<lastmod>2017-01-12T21:36:24+00:00</lastmod>
+<changefreq>Daily</changefreq>
 </url>
 <url>
-  <loc>http://lianlong.website/about/</loc>
-  <lastmod>2017-01-10T12:47:25+00:00</lastmod>
-  <changefreq>daily</changefreq>
+<loc>http://lianlong.website/tag/</loc>
+<priority>1.0</priority>
+<lastmod>2017-01-12T21:36:23+00:00</lastmod>
+<changefreq>Daily</changefreq>
 </url>
 <url>
-  <loc>http://lianlong.website/2017/01/10/Geant4-quick-userguide2/</loc>
-  <lastmod>2017-01-10T12:47:25+00:00</lastmod>
-  <changefreq>daily</changefreq>
+<loc>http://lianlong.website/2017/01/05/git-window-chinese/</loc>
+<priority>1.0</priority>
+<lastmod>2017-01-12T21:36:26+00:00</lastmod>
+<changefreq>Daily</changefreq>
 </url>
 <url>
-  <loc>http://lianlong.website/2017/01/10/Geant-quick-userguide/</loc>
-  <lastmod>2017-01-10T12:47:25+00:00</lastmod>
-  <changefreq>daily</changefreq>
+<loc>http://lianlong.website/2017/01/07/build-my-blog/</loc>
+<priority>1.0</priority>
+<lastmod>2017-01-12T21:36:25+00:00</lastmod>
+<changefreq>Daily</changefreq>
 </url>
 <url>
-  <loc>http://lianlong.website/2017/01/08/test-code-net/</loc>
-  <lastmod>2017-01-10T12:47:25+00:00</lastmod>
-  <changefreq>daily</changefreq>
+<loc>http://lianlong.website/2017/01/08/test-code-net/</loc>
+<priority>1.0</priority>
+<lastmod>2017-01-12T21:36:25+00:00</lastmod>
+<changefreq>Daily</changefreq>
 </url>
 <url>
-  <loc>http://lianlong.website/2017/01/07/build-my-blog/</loc>
-  <lastmod>2017-01-10T12:47:25+00:00</lastmod>
-  <changefreq>daily</changefreq>
+<loc>http://lianlong.website/2017/01/10/Geant4-quick-userguide2/</loc>
+<priority>1.0</priority>
+<lastmod>2017-01-12T21:36:24+00:00</lastmod>
+<changefreq>Daily</changefreq>
 </url>
 <url>
-  <loc>http://lianlong.website/2017/01/05/git-window-chinese/</loc>
-  <lastmod>2017-01-10T12:47:25+00:00</lastmod>
-  <changefreq>daily</changefreq>
+<loc>http://lianlong.website/2017/01/10/Geant-quick-userguide/</loc>
+<priority>1.0</priority>
+<lastmod>2017-01-12T21:36:25+00:00</lastmod>
+<changefreq>Daily</changefreq>
 </url>
 </urlset>
