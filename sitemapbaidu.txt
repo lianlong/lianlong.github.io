@@ -1,0 +1,12 @@
+www.lianlong.website/
+www.lianlong.website/about/
+www.lianlong.website/archive/
+www.lianlong.website/category/
+www.lianlong.website/collection/
+www.lianlong.website/demo/
+www.lianlong.website/tag/
+www.lianlong.website/2017/01/05/git-window-chinese/
+www.lianlong.website/2017/01/07/build-my-blog/
+www.lianlong.website/2017/01/08/test-code-net/
+www.lianlong.website/2017/01/10/Geant4-quick-userguide2/
+www.lianlong.website/2017/01/10/Geant-quick-userguide/
