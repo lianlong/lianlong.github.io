@@ -33,7 +33,7 @@ author: lianlong
 
 然后点击获取源代码，选择通用的web代码即可
 
-！[源代码](http://oj9jepyz4.bkt.clouddn.com/%E8%8E%B7%E5%8F%96%E4%BB%A3%E7%A0%81.png)
+![源代码](http://oj9jepyz4.bkt.clouddn.com/%E8%8E%B7%E5%8F%96%E4%BB%A3%E7%A0%81.png)
 
 # 2. Jekyll中网易云更贴设置
 
